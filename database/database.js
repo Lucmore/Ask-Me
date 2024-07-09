@@ -1,24 +1,16 @@
-require('dotenv').config()
-
 const { Sequelize } = require('@sequelize/core')
-const { PostgresDialect } = require('@sequelize/postgres')
+const { MariaDbDialect } = require('@sequelize/mariadb')
 
 const connection = new Sequelize({
-    dialect: PostgresDialect,
-    database: process.env.DB_NAME,
-    user: Process.env.USER,
-    password: process.env.PASSWORD,
-    host: process.env.HOST,
-    port: process.env.DB_PORT,
- 
+    dialect: MariaDbDialect,
+    database: 'askme',
+    user: 'administrador',
+    password: '123456',
+    host: '172.16.96.176',
+    port: 3306,
+    showWarnings: true,
+    connectTimeout: 1000,
 })
 
-// const { Sequelize } = require('@sequelize/core')
-// const { SqliteDialect } = require('@sequelize/sqlite3')
-
-// const connection = new Sequelize({
-//     dialect: SqliteDialect,
-//     storage: 'database/askme.db'
-// })
-
 module.exports = connection
+
