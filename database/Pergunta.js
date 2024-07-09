@@ -6,7 +6,7 @@ const Pergunta = connection.define('pergunta',{
     descricao: {type: Sequelize.TEXT, allowNull: false}
 })
 
-//CREATE TABLE IN NOT EXISTS
+//CREATE TABLE IF NOT EXISTS
 Pergunta.sync({force: false})
     .then(()=>{
         console.log('Tabela pergunta sincronizada')
@@ -16,4 +16,4 @@ Pergunta.sync({force: false})
     })
 
 
-module.exports = Pergunta;
+    module.exports = Pergunta;

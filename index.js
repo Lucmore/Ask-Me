@@ -9,36 +9,36 @@ const port = 3000
 
 connection
     .authenticate()
-    .then(() =>{
-        console.log("Banco de dados conectado com suceso!")
-    }).catch((msgErro)=> {
+    .then(() => {
+        console.log("Banco de dados conectado com sucesso!")
+    }).catch((msgErro) => {
         console.log(msgErro)
     })
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
-app.use(bodyparser.urlencoded({extended:false}))
+app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json())
 
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
     //SELECT * FROM pergunta
     Pergunta.findAll({raw: true, order:[
         ['id', 'DESC']
     ]}).then(perguntas =>{
+        console.log(perguntas)
         res.render('index',{
             perguntas: perguntas,
             moment: moment
         })
-        
     })
 })
 
-app.get('/perguntar', (req, res) =>{
+app.get('/perguntar', (req, res) => {
     res.render('perguntar')
 })
 
-app.post('/salvarpergunta', (req, res)=>{
+app.post('/salvarpergunta', (req, res) => {
     let titulo = req.body.titulo
     let descricao = req.body.descricao
     Pergunta.create({
@@ -49,24 +49,47 @@ app.post('/salvarpergunta', (req, res)=>{
     })
 })
 
-app.get('/pergunta/:id', (req, res) => {
+app.get('/pergunta/:id', (req, res) =>{
     let id = req.params.id
     Pergunta.findOne({
         where: {id: id}
     }).then(pergunta =>{
         if(pergunta != undefined){
-            res.render('pagina-pergunta', {
-                pergunta: pergunta
+            Resposta.findAll({
+                where: {perguntaId: pergunta.id},
+                order:[['id', 'DESC']]
+            }).then(respostas =>{
+                res.render('pagina-pergunta',{
+                    pergunta: pergunta,
+                    respostas: respostas,
+                    moment: moment
+                })
             })
+        }else{
+            res.redirect('/')
         }
     })
 })
 
-
-app.listen(port, (erro) =>{
-    if(erro){
-        console.log("Erro ao iniciar o servidor")
+app.post('/responder', (req, res) =>{
+    let corpo = req.body.corpo
+    let perguntaId = req.body.perguntaId
+    if(corpo != ''){
+        Resposta.create({
+            corpo: corpo,
+            perguntaId: perguntaId
+        }).then(()=>{
+            res.redirect('/pergunta/' + perguntaId)
+        })
     }else{
+        res.redirect('/pergunta/' + perguntaId)
+    } 
+})
+
+app.listen(port, (erro) => {
+    if (erro) {
+        console.log("Erro ao iniciar o servidor")
+    } else {
         console.log(`Servidor rodando em http://localhost:${port}`)
     }
 })
