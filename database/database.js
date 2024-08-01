@@ -9,8 +9,6 @@ const connection = new Sequelize({
   password: process.env.PASSWORD,
   host: process.env.HOST,
   port: process.env.DB_PORT,
-  ssl: true,
-  clientMinMessages: 'notice',
 });
 
 module.exports = connection
