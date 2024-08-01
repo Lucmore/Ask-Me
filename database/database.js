@@ -1,5 +1,5 @@
 const { Sequelize } = require('@sequelize/core')
-import { PostgresDialect } from '@sequelize/postgres';
+const { PostgresDialect } = require('@sequelize/postgres')
 require('dotenv').config()
 
 const connection = new Sequelize({
