@@ -1,16 +1,17 @@
 const { Sequelize } = require('@sequelize/core')
-const { MariaDbDialect } = require('@sequelize/mariadb')
+import { PostgresDialect } from '@sequelize/postgres';
+require('dotenv').config()
 
 const connection = new Sequelize({
-    dialect: MariaDbDialect,
-    database: 'askme',
-    user: 'administrador',
-    password: '123456',
-    host: '172.16.96.176',
-    port: 3306,
-    showWarnings: true,
-    connectTimeout: 1000,
-})
+  dialect: PostgresDialect,
+  database: process.env.DB_NAME,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  host: process.env.HOST,
+  port: process.env.DB_PORT,
+  ssl: true,
+  clientMinMessages: 'notice',
+});
 
 module.exports = connection
 
